@@ -297,6 +297,8 @@ Source: `admin_housing_lottery.txt`
 | 4 | Chunks are complete, self-contained thoughts | 4 of 5 | MET | Printed 5 sample chunks and read each one. 4 of 5 stood alone as complete thoughts; the one exception (a "followup" reply post) referenced context from a separate document. |
 | 5 | Sources retrieved include the actual answer document | 4 of 5 | MET | Checked each of the 5 questions' retrieved sources against the document I knew contained the answer. All 5 matched. |
 
+
+
 ## Diagnoses
 
 <!-- For each miss: which stage caused it, and how. The stage alone isn't
