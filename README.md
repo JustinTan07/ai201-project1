@@ -1,6 +1,6 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
+Justin Tan Campus life 
 
 > **This file is your submission.** Fill it in as you go — most sections get
 > written during the milestone that produces them, not at the end.
@@ -21,10 +21,13 @@
 # Week 1
 
 ## What This Does
+The campus life corpus shares short post about student life at a university. There are students questions about dining hall, dorms, courses, and the administrative rules. Then there are responses to those questions.
 
 <!-- Three or four sentences. Which corpus you picked, and the kinds of
      questions your system answers. Write it for someone who has never seen
      this repo.
+
+     
 
      Milestone 5. -->
 
