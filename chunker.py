@@ -82,22 +82,33 @@ def fallback_split(
 
 def split_documents(documents: list[Document]) -> list[Chunk]:
     """
-    Split documents into chunks. ⚠️ REPLACE THE BODY OF THIS IN MILESTONE 3.
+    Milestone 3 strategy: one document = one chunk.
 
-    Right now it just calls the fallback. That is the plain, generic behaviour
-    the brief is talking about.
+    campus_life is made of short posts (88 documents, ~317 characters average,
+    longest 549). Almost none of them approach a length where splitting would
+    help, so instead of cutting on an arbitrary character count, each document
+    becomes exactly one chunk — its full text, untouched.
 
-    When you write your own strategy, set `produced_by` to
-    "chunker.py::split_documents" so your README's Sample Chunks section names
-    the right function. `app.py chunks` prints that string for you.
-
-    Things worth thinking about before you write any code:
-      - Are your documents short posts or long guides?
-      - Is the useful information in one sentence, or spread over a paragraph?
-      - Would splitting on paragraph breaks keep more thoughts intact than
-        splitting on a character count?
+    Known limitation: some posts are "followup" replies to an earlier post
+    (e.g. dining_pellew_dining_hall_followup.txt responds to
+    dining_pellew_dining_hall.txt). Those chunks are grammatically complete
+    but assume context from the original post, which lives in a separate
+    chunk. Retrieval sometimes pulls both together when relevant, but a
+    chunk read alone can reference something not included in it.
     """
-    return fallback_split(documents)
+    chunks: list[Chunk] = []
+    for doc in documents:
+        text = doc.text.strip()
+        if text:
+            chunks.append(
+                Chunk(
+                    text=text,
+                    source=doc.source,
+                    index=0,
+                    produced_by="chunker.py::split_documents",
+                )
+            )
+    return chunks
 
 
 def describe(chunks: list[Chunk]) -> str:

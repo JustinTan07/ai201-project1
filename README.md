@@ -21,7 +21,7 @@ Justin Tan Campus life
 # Week 1
 
 ## What This Does
-The campus life corpus shares short post about student life at a university. There are students questions about dining hall, dorms, courses, and the administrative rules. Then there are responses to those questions.
+The campus life corpus shares short post about student life at a university. There are students questions about dining hall, dorms, courses, and the administrative rules. The system answers general questions regarding student life like when do dining halls close, which dorms are the best, etc.
 
 <!-- Three or four sentences. Which corpus you picked, and the kinds of
      questions your system answers. Write it for someone who has never seen
@@ -33,9 +33,10 @@ The campus life corpus shares short post about student life at a university. The
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** : Full Length of document  
+**Overlap:** : 0 
 
+I picked this chunk size since each document were realtively short where they had less than 600 characters. Since they were short, I chose the entire length of the document to be the chunk size with 0 overlap since we are taking the whole length.
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
      reasonable" earns nothing. Point at something you noticed when you read
@@ -57,29 +58,59 @@ The campus life corpus shares short post about student life at a university. The
 
      Milestone 3. -->
 
-**Chunk 1** — source: `` — produced by: ``
+**Chunk 1** — source: `admin_add_drop_deadline.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+On the add/drop deadline
+
+You can add a course through the end of the second week. Dropping is a longer window — through the end of week six — but a drop after week two shows as a W on your transcript. Nothing anywhere on the registrar's site says this plainly, and students find out from each other.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: `course_biol_160.txt#0 ` — produced by: `chunker.py::split_documents`
 
 ```
-```
+BIOL 160 Cell Biology
 
-**Chunk 3** — source: `` — produced by: ``
+I lived here my sophomore year. Format is lecture three times a week with a weekly lab. Assessment: four unit tests and a cumulative final. Not curved.
 
-```
-```
+Expect 9 to 11 hours a week, the heaviest first-year course by reputation.
 
-**Chunk 4** — source: `` — produced by: ``
-
-```
-```
-
-**Chunk 5** — source: `` — produced by: ``
+The one piece of advice: the unit tests come fast, roughly every three weeks; falling behind once is very hard to recover from.
 
 ```
+
+**Chunk 3** — source: `course_hist_118_workload.txt#0` — produced by: `chunker.py::split_documents`
+
+```
+Workload for HIST 118 Modern World History
+
+People keep asking so: a lot of reading, about 120 pages a week, but no problem sets. That's real time, not optimistic time.
+
+It's front-loaded — the first month is heavier than the rest, partly because you're learning the format.
+```
+
+**Chunk 4** — source: `dining_pellew_dining_hall_followup.txt#0 ` — produced by: `chunker.py::split_documents`
+
+```
+Re: Pellew Dining Hall
+
+Adding to what people have said about Pellew Dining Hall. The wait figure of 12 to 18 minutes at peak matches what I've seen. If you're trying to eat between classes, go before 11:45 and it's a different building entirely.
+
+Also worth saying: the furthest hall from anywhere, next to the athletics centre. Nobody tells you this at orientation.
+```
+
+**Chunk 5** — source: ` housing_innisfree_hall.txt#0 ` — produced by: `chunker.py::split_documents`
+
+```
+Innisfree Hall — what it's actually like
+
+Transferred in last year, so take this with a grain of salt. Built 1991, renovated 2022. Rooms are doubles arranged as pairs sharing one bathroom between two rooms.
+
+The good: the shared-bathroom-between-two-rooms arrangement is the best compromise on campus.
+
+The bad: no air conditioning, which matters for the first three weeks of September.
+
+Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building is L-shaped and the short wing is much quieter.
 ```
 
 ## Sample Answer
@@ -87,11 +118,17 @@ The campus life corpus shares short post about student life at a university. The
 <!-- One complete question and answer, pasted as text, with the source line
      visible. Milestone 4. -->
 
-**Question:**
+**Question:** What do people say about North Kitchen?
 
 **Answer:**
 
 ```
+(best distance 0.320, cutoff 0.6)
+
+People say North Kitchen has no wait times because it seats 60 and is rarely more than half full, and that if you are trying to eat between classes, you should go before 11:45. The highlight is the ambitious rotating regional menu that changes fortnightly, and it is closed all summer and during reading week (which nobody tells you at orientation). 
+Sources: `dining_north_kitchen.txt` and `dining_north_kitchen_followup.txt`.
+
+Sources retrieved: dining_halden_hall.txt, dining_kestrel_commons.txt, dining_north_kitchen.txt, dining_north_kitchen_followup.txt, dining_verrill_street_grill_followup.txt
 ```
 
 **My relevance cutoff:**
@@ -107,8 +144,18 @@ The campus life corpus shares short post about student life at a university. The
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| Is the housing lottery random? | Yes | 0.254 |
+| When is the course drop deadline | Yes | 0.257 |
+| What do people say about North Kitchen? | Yes | 0.320 |
+| What time does dining hall close | Yes | 0.347 |
+| Are the libraries crowded | Yes | 0.487 |
+| What is the capital of Mongolia? | No | 0.825 |
+| Who won the 1994 World Cup? | No | 0.886 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.844 |
+| How do I write a for loop in Rust? | No | 0.896 |
+| How do I change the oil in a diesel engine? | No | 0.934 |
 
+The cutoff I chose is somewhere in the range of 0.6 since related questions have a distance of around 0.3 stretching to 0.487. Since the last question that is somewhat related had a distance of 0.487 I think 0.6 is a good distance for somewhat relevant information to a given question.
 ## How I Used AI
 
 <!-- Two specific moments. For each: what you asked for, what came back, and
@@ -120,9 +167,13 @@ The campus life corpus shares short post about student life at a university. The
 
      Milestone 5. -->
 
+
+
 **1.**
+I asked claude to help me review some of the corpus regarding the length to see what I can choose my chunk size to be.
 
 **2.**
+I asked claude to help me create and review the split chunk function so that it would chunk the entire document instead of parts of the document since I wanted chunk size to be entire length.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
@@ -151,15 +202,81 @@ The campus life corpus shares short post about student life at a university. The
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 5/5 | 4/5 | 5/5 | MET |
+| 2. Every answer names a source | 5 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Chunks are complete, self-contained thoughts | 4 of 5 | 4/5 | 4/5 | 4/5 | MET |
+| 5. Sources retrieved include the actual answer document | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
      Name the file and function that produced it. -->
+
+### Criterion 1
+
+Scored manually by checking if each answer in the before log had the expected phrase from `expects` appear in the answer. From the before log:
+
+| Question | Run 1 | Run 2 | Run 3 |
+|---|---|---|---|
+| Is the housing lottery random? | pass | pass | pass |
+| What time does dining hall close | pass | fail | pass |
+| What do people say about North Kitchen? | pass | pass | pass |
+| Are the libraries crowded | pass | pass | pass |
+| When is the course drop deadline | pass | pass | pass |
+
+### Criterion 2
+
+Read off the answers from the before log, produced by `generate.py::answer_from_chunks`. Each of the answers in the before log names at least one source file.
+
+```
+The course drop deadline is through the end of week six. 
+
+Source: `admin_add_drop_deadline.txt` (also mentioned in `admin_withdrawal_deadline.txt`).
+```
+
+### Criterion 3
+
+Produced by `run_eval.py::check_out_of_scope`, text comes from the before log.
+
+| Out-of-scope question | Best distance | Gate |
+|---|---|---|
+| What is the capital of Mongolia? | 0.825 | refused |
+| How do I change the oil in a diesel engine? | 0.934 | refused |
+| Who won the 1994 World Cup? | 0.886 | refused |
+| What is the recommended dosage of ibuprofen for a headache? | 0.844 | refused |
+| How do I write a for loop in Rust? | 0.896 | refused |
+
+### Criterion 4
+
+The five chunks analyzed were produced by `chunker.py::split_documents` and each can be seen to be one full document, since the chunker doesn't split anything.
+
+```
+Innisfree Hall — what it's actually like
+
+Transferred in last year, so take this with a grain of salt. Built 1991, renovated 2022. Rooms are doubles arranged as pairs sharing one bathroom between two rooms.
+
+The good: the shared-bathroom-between-two-rooms arrangement is the best compromise on campus.
+```
+
+One exception was found — a "followup" chunk that references missing context from a separate document:
+
+```
+Re: Pellew Dining Hall
+
+Adding to what people have said about Pellew Dining Hall. The wait figure of 12 to 18 minutes at peak matches what I've seen.
+```
+
+### Criterion 5
+
+Scored manually by double checking the sources given by the answers in the before log with the sources I expected.
+
+- Sources retrieved: admin_housing_lottery.txt, admin_parking_permits.txt, advising_registration.txt, housing_morrow_house.txt, housing_tamsin_court.txt
+
+```
+The housing lottery is not entirely random in the way most people assume. While rising sophomores get a number drawn at random, juniors and seniors are ordered by accumulated credit hours first, with random tie-breaks used only for ties. 
+
+Source: `admin_housing_lottery.txt`
+```
 
 ## Verdicts
 
@@ -172,13 +289,13 @@ The campus life corpus shares short post about student life at a university. The
 
      Milestone 2. -->
 
-| # | Criterion | Verdict | How I decided |
-|---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| # | Criterion | Target | Verdict | How I decided |
+|---|---|---|---|---|
+| 1 | Retrieved chunk contains the answer | 4 of 5 | MET | Every run hit at least 4/5. Run 2 dropped to exactly 4/5 — the dining hall question failed only because my `expects` phrase ("7:00 pm", with a space) didn't exact-match the model's phrasing ("7:00pm", no space) that run, not because the answer was actually wrong. The target held every time. |
+| 2 | Every answer names a source | 5 of 5 | MET | Read all 15 answers across the 3 runs (5 question     s × 3 runs) — every single one named at least one source document, no exceptions. |
+| 3 | Gate stops out-of-corpus questions | 4 of 5 | MET | 5 of 5 out-of-scope questions were refused, comfortably clearing the 4-of-5 target with no misses at all. |
+| 4 | Chunks are complete, self-contained thoughts | 4 of 5 | MET | Printed 5 sample chunks and read each one. 4 of 5 stood alone as complete thoughts; the one exception (a "followup" reply post) referenced context from a separate document. |
+| 5 | Sources retrieved include the actual answer document | 4 of 5 | MET | Checked each of the 5 questions' retrieved sources against the document I knew contained the answer. All 5 matched. |
 
 ## Diagnoses
 
